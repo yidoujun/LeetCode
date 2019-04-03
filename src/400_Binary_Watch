@@ -1,0 +1,44 @@
+class Solution {
+    public List<String> readBinaryWatch(int num) {
+        //定义集合res,存放递归回溯结果
+		List<String> res = new ArrayList<>();
+		//存放二进制手表小时和分钟单个亮灯的所表示的值
+		int[] time = new int[] {1,2,4,8,1,2,4,8,16,32};
+		
+		backtrack(res, time, num, 0, 0, 0, 0);
+		return res;
+	}
+ 
+    /**
+	 * @param res       存放递归回溯结果
+	 * @param time      二进制手表小时和分钟单个亮灯的所表示的值
+	 * @param num       用户输入的亮灯数
+	 * @param count     用来记当前亮灯的数量
+	 * @param start
+	 * @param hour      小时
+	 * @param min       分钟
+	 */
+	public void backtrack(List<String> res,int[] time,int num,int count,int start,int hour,int min){
+        //当hour和min中一个超过范围，就结束此递归
+		if(hour > 11 || min > 59) return;
+		
+		//当num等于count，就添加到res中，并结束此递归
+		if(num == count) {
+			String hh = ""+hour;
+			String mm = min < 10 ? "0"+min : ""+min;
+			res.add(hh + ":" + mm);
+			return;
+		}
+		
+		/**
+		 * 既是递归，又有回溯[该算法核心地方]
+		 */
+		for(int i = start; i < time.length; i++) {
+			int newHour = i < 4 ? hour+time[i] : hour;
+			int newMin = i < 4 ? min : min+time[i];
+			
+			backtrack(res, time, num, count+1, i+1, newHour, newMin);
+		}
+       
+	}	
+}
